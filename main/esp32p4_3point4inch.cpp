@@ -11,21 +11,17 @@ extern "C" void app_main(void)
     printf("\\___/___,'    /_/____/ \\___/____/\r\n");
     
     // 运行测试
-    Jd9365 test;
-    test.init();
-    
+    Jd9365 jd9365_lcd;
+    jd9365_lcd.init();
+
     ESP_LOGI("jd9365 testing", "Show color bar pattern drawn by hardware");
-
-    //for(int i = 0; i < 10; i++) {
-
-    //}
 
     // 保持运行
     while (true) {
         #if 1
-        TEST_ESP_OK(esp_lcd_dpi_panel_set_pattern(*(test.m_LcdPanel), MIPI_DSI_PATTERN_BAR_VERTICAL));
+        TEST_ESP_OK(esp_lcd_dpi_panel_set_pattern(*(jd9365_lcd.m_LcdPanel), MIPI_DSI_PATTERN_BAR_VERTICAL));
         vTaskDelay(pdMS_TO_TICKS(3000));
-        TEST_ESP_OK(esp_lcd_dpi_panel_set_pattern(*(test.m_LcdPanel), MIPI_DSI_PATTERN_BAR_HORIZONTAL));
+        TEST_ESP_OK(esp_lcd_dpi_panel_set_pattern(*(jd9365_lcd.m_LcdPanel), MIPI_DSI_PATTERN_BAR_HORIZONTAL));
         vTaskDelay(pdMS_TO_TICKS(3000));
         #else
         vTaskDelay(pdMS_TO_TICKS(1000));
