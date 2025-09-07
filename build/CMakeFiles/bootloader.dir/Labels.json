@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/CMakeFiles/bootloader"
+		},
+		{
+			"file" : "/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/CMakeFiles/bootloader.rule"
+		},
+		{
+			"file" : "/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/CMakeFiles/bootloader-complete.rule"
+		},
+		{
+			"file" : "/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+		},
+		{
+			"file" : "/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+		},
+		{
+			"file" : "/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+		},
+		{
+			"file" : "/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+		},
+		{
+			"file" : "/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+		},
+		{
+			"file" : "/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+		},
+		{
+			"file" : "/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"bootloader"
+		],
+		"name" : "bootloader"
+	}
+}

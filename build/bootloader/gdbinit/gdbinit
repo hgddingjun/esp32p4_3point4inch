@@ -1,0 +1,2 @@
+source /home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader/gdbinit/symbols
+source /home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader/gdbinit/connect

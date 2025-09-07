@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/CMakeFiles/bootloader
+/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/CMakeFiles/bootloader.rule
+/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/CMakeFiles/bootloader-complete.rule
+/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
