@@ -1,0 +1,15 @@
+[1/9] Performing build step for 'bootloader'
+[1/1] cd /home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader/esp-idf/esptool_py && /home/dingjun/.espressif/python_env/idf5.4_py3.8_env/bin/python /home/dingjun/workspace/esp32/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x2000 /home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/bootloader/bootloader.bin
+Bootloader binary size 0x5700 bytes. 0x900 bytes (9%) free.
+[2/7] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/esp32p4_3point4inch.cpp.obj
+[3/7] Linking C static library esp-idf/main/libmain.a
+[4/7] Generating ld/sections.ld
+[5/7] Linking CXX executable esp32p4_3point4inch.elf
+[6/7] Generating binary image from built executable
+esptool.py v4.9.0
+Creating esp32p4 image...
+Merged 4 ELF sections
+Successfully created esp32p4 image.
+Generated /home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/esp32p4_3point4inch.bin
+[7/7] cd /home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/esp-idf/esptool_py && /home/dingjun/.espressif/python_env/idf5.4_py3.8_env/bin/python /home/dingjun/workspace/esp32/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/partition_table/partition-table.bin /home/dingjun/workspace/esp32/myesp/esp32p4_3point4inch/build/esp32p4_3point4inch.bin
+esp32p4_3point4inch.bin binary size 0x47b00 bytes. Smallest app partition is 0x100000 bytes. 0xb8500 bytes (72%) free.

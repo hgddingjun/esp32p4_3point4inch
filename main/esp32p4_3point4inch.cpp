@@ -15,10 +15,20 @@ extern "C" void app_main(void)
     test.init();
     
     ESP_LOGI("jd9365 testing", "Show color bar pattern drawn by hardware");
-    TEST_ESP_OK(esp_lcd_dpi_panel_set_pattern(*(test.m_LcdPanel), MIPI_DSI_PATTERN_BAR_VERTICAL));
-    
+
+    //for(int i = 0; i < 10; i++) {
+
+    //}
+
     // 保持运行
     while (true) {
+        #if 1
+        TEST_ESP_OK(esp_lcd_dpi_panel_set_pattern(*(test.m_LcdPanel), MIPI_DSI_PATTERN_BAR_VERTICAL));
+        vTaskDelay(pdMS_TO_TICKS(3000));
+        TEST_ESP_OK(esp_lcd_dpi_panel_set_pattern(*(test.m_LcdPanel), MIPI_DSI_PATTERN_BAR_HORIZONTAL));
+        vTaskDelay(pdMS_TO_TICKS(3000));
+        #else
         vTaskDelay(pdMS_TO_TICKS(1000));
+        #endif
     }
 }

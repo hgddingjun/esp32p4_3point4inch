@@ -11,18 +11,10 @@ constexpr bool LCD_BK_LIGHT_ON_LEVEL = 0; // 0 or 1
 constexpr bool LCD_BK_LIGHT_OFF_LEVEL = !LCD_BK_LIGHT_ON_LEVEL;
 constexpr uint8_t MIPI_DSI_LANE_NUM = 2;
 
-// 像素格式选择
-// #if (LCD_BIT_PER_PIXEL == 24)
-// #define MIPI_DPI_PX_FORMAT     (LCD_COLOR_PIXEL_FORMAT_RGB888)
-// #elif (LCD_BIT_PER_PIXEL == 18)
-// #define MIPI_DPI_PX_FORMAT     (LCD_COLOR_PIXEL_FORMAT_RGB666)
-// #elif (LCD_BIT_PER_PIXEL == 16)
-// #define MIPI_DPI_PX_FORMAT     (LCD_COLOR_PIXEL_FORMAT_RGB565)
-// #endif
-
 constexpr uint32_t DELAY_TIME_MS = 3000;
 constexpr uint32_t MIPI_DSI_PHY_PWR_LDO_CHAN = 3;
 constexpr uint32_t MIPI_DSI_PHY_PWR_LDO_VOLTAGE_MV = 2500;
+
 
 struct Jd9365LcdInitCmd {
     uint8_t cmd;
@@ -271,11 +263,11 @@ void Jd9365::init() {
 #endif
 
         // 为MIPI DSI PHY上电
-#ifdef TEST_MIPI_DSI_PHY_PWR_LDO_CHAN
+#if 1//def TEST_MIPI_DSI_PHY_PWR_LDO_CHAN
         ESP_LOGI(TAG, "MIPI DSI PHY Powered on");
         esp_ldo_channel_config_t ldo_mipi_phy_config = {
-            .chan_id = TEST_MIPI_DSI_PHY_PWR_LDO_CHAN,
-            .voltage_mv = TEST_MIPI_DSI_PHY_PWR_LDO_VOLTAGE_MV,
+            .chan_id = MIPI_DSI_PHY_PWR_LDO_CHAN,
+            .voltage_mv = MIPI_DSI_PHY_PWR_LDO_VOLTAGE_MV,
             .flags = {}
         };
         
@@ -299,41 +291,6 @@ void Jd9365::init() {
         m_LcdPanelIo.reset(new esp_lcd_panel_io_handle_t(dbi_io_handle));
 
         ESP_LOGI(TAG, "Install LCD driver of jd9365");
-
-
-#if 0
-        esp_lcd_dpi_panel_config_t dpi_config = {
-            .dpi_clk_src = MIPI_DSI_DPI_CLK_SRC_DEFAULT,
-            .dpi_clock_freq_mhz = 80,
-
-//#if (LCD_BIT_PER_PIXEL == 24)
-            .pixel_format = LCD_COLOR_PIXEL_FORMAT_RGB888,
-// #elif (LCD_BIT_PER_PIXEL == 18)
-//             .pixel_format = LCD_COLOR_PIXEL_FORMAT_RGB666,
-// #elif (LCD_BIT_PER_PIXEL == 16)
-//             .pixel_format = LCD_COLOR_PIXEL_FORMAT_RGB565,
-// #endif
-
-            //.in_color_format = 0, // 根据实际设置，如果没有可用0或默认值
-            //.out_color_format = 0, // 根据实际设置
-            .num_fbs = 1,
-            .video_timing = {
-                .h_size = 800,
-                .v_size = 800,
-                .hsync_back_porch = 20,
-                .hsync_pulse_width = 20,
-                .hsync_front_porch = 40,
-                .vsync_back_porch = 12,
-                .vsync_pulse_width = 4,
-                .vsync_front_porch = 24,
-            },
-            .flags = {
-                .use_dma2d = true,
-            }
-        };
-#endif
-
-
 
         esp_lcd_dpi_panel_config_t dpi_config = {
             .dpi_clk_src = MIPI_DSI_DPI_CLK_SRC_DEFAULT,
