@@ -28,7 +28,7 @@ dependencies:
   idf:
     source:
       type: idf
-    version: 5.4.1
+    version: 5.5.0
 direct_dependencies:
 - espressif/esp_lcd_jd9365
 manifest_hash: 9f860dd24452ca9a34e3905c22f254b9f0f11b0909df405af025f4bd0137f164
