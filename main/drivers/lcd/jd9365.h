@@ -43,7 +43,7 @@ class Jd9365 : public Drivers {
         void reset() override;
         void suspend() override;
         void resume() override;
-        ~Jd9365() {}
+        virtual ~Jd9365() {}
 
         void drawColorBar(uint16_t h_res, uint16_t v_res);
         void drawPattern();

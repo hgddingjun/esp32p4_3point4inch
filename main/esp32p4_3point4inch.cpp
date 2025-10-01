@@ -1,5 +1,8 @@
 #include <cstdio>
 #include "jd9365.h"
+#include "sdmmc.h"
+
+extern void sdmmc_run(void);
 
 extern "C" void app_main(void)
 {
@@ -9,7 +12,11 @@ extern "C" void app_main(void)
     printf("    \\ \\/ /\\ / (_) ||_ \\| '_ \\___ \\\r\n");
     printf("/\\_/ / /_// \\__, |__) | (_) |__) |\r\n");
     printf("\\___/___,'    /_/____/ \\___/____/\r\n");
-    
+
+    Sdmmc sd;
+    sd.init();
+    sd.searchingFlash();
+
     // 运行测试
     Jd9365 jd9365_lcd;
     jd9365_lcd.init();
