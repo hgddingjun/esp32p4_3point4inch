@@ -13,7 +13,10 @@
 #include "sdmmc_cmd.h"
 #include "esp_flash.h"
 
+#include <stdio.h>
 #include <sys/stat.h>
+#include <dirent.h>
+#include <string.h>
 
 #include "drivers.h"
 
@@ -30,11 +33,15 @@ class Sdmmc : public Drivers {
         uint32_t getSDCardSize() { return m_SDCardSize; }
         uint32_t getFlashSize() { return m_FlashSize; }
         void searchingFlash();
+        void listMp3FilesRecursive(const char *basePath); //递归显示mp3文件
+        void listMp3Files(); //显示mp3文件
 
     private:
         static const char* TAG;
         uint32_t m_SDCardSize = 0;
         uint32_t m_FlashSize = 0;
+        bool isMp3File(const char* filename);
+        void printFileInfo(const char* filename, long size, const char* fullpath);
 };
 
 #endif /* _SDMMC_H_ */

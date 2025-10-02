@@ -13,6 +13,11 @@ extern "C" void app_main(void)
     printf("/\\_/ / /_// \\__, |__) | (_) |__) |\r\n");
     printf("\\___/___,'    /_/____/ \\___/____/\r\n");
 
+
+    // 设置区域设置以支持中文（如果ESP-IDF支持）
+    // setlocale(LC_ALL, "zh_CN.UTF-8");
+
+    ESP_LOGI("Main", "启动SD卡和显示系统...");
     Sdmmc sd;
     sd.init();
     sd.searchingFlash();
@@ -21,7 +26,7 @@ extern "C" void app_main(void)
     Jd9365 jd9365_lcd;
     jd9365_lcd.init();
 
-    ESP_LOGI("jd9365 testing", "Show color bar pattern drawn by hardware");
+    ESP_LOGI("Main", "系统初始化完成，开始显示测试...");
 
     // 保持运行
     while (true) {
