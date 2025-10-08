@@ -9,6 +9,6 @@ idf_component_register(
 						"./drivers/lcd"
 						"./drivers/sdmmc"
 						"."
-					REQUIRES fatfs esp_adc esp_timer unity sdmmc spi_flash
+					REQUIRES fatfs esp_adc esp_timer unity sdmmc spi_flash esp_psram
                     WHOLE_ARCHIVE)
 target_compile_options(${COMPONENT_LIB} PRIVATE -std=gnu++14)
