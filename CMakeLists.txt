@@ -10,3 +10,5 @@ idf_build_set_property(COMPILE_DEFINITIONS "-DFT2_BUILD_LIBRARY" APPEND)
 idf_build_set_property(COMPILE_DEFINITIONS "-DFT_CONFIG_MODULES_H=<${CMAKE_CURRENT_SOURCE_DIR}/managed_components/lvgl__lvgl/src/libs/freetype/ftmodule.h>" APPEND)
 idf_build_set_property(COMPILE_DEFINITIONS "-DFT_CONFIG_OPTIONS_H=<${CMAKE_CURRENT_SOURCE_DIR}/managed_components/lvgl__lvgl/src/libs/freetype/ftoption.h>" APPEND)
 
+set(EXTRA_COMPONENT_DIRS managed_components/espressif__libpng)
+

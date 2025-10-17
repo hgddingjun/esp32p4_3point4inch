@@ -4,3 +4,4 @@ dependencies:
   waveshare/esp32_p4_wifi6_touch_lcd_xc: '*'
   espressif/freetype: "^2.13.3~1"
   lvgl/lvgl: ^9.3.0
+  espressif/libpng: '*'
