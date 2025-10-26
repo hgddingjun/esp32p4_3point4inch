@@ -1,8 +1,9 @@
 #include <cstdio>
 #include "jd9365.h"
 #include "sdmmc.h"
+#include "spiffs.h"
 
-extern void sdmmc_run(void);
+//extern void sdmmc_run(void);
 
 extern "C" void app_main(void)
 {
@@ -14,8 +15,11 @@ extern "C" void app_main(void)
     printf("\\___/___,'    /_/____/ \\___/____/\r\n");
 
 
-    // 设置区域设置以支持中文（如果ESP-IDF支持）
+    // 设置区域设置以支持中文(如果ESP-IDF支持)
     // setlocale(LC_ALL, "zh_CN.UTF-8");
+    ESP_LOGI("Main", "启动SPIFFS文件系统...");
+    Spiffs spiffs;
+    spiffs.init();
 
     ESP_LOGI("Main", "启动SD卡和显示系统...");
     Sdmmc sd;
