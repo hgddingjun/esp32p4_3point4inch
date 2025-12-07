@@ -9,15 +9,16 @@ project(esp32p4_3point4inch)
 set(PARTITION_TABLE_CSV partitions.csv)
 
 # 设置SPIFFS镜像生成
-set(SPIFFS_IMAGE_DIR "${CMAKE_CURRENT_LIST_DIR}/spiffs_image")
-set(SPIFFS_IMAGE_SIZE 0x1000000)  # 16MB，根据分区表设置
+# set(SPIFFS_IMAGE_DIR "${CMAKE_CURRENT_LIST_DIR}/spiffs_image")
+# set(SPIFFS_IMAGE_SIZE 0x1000000)  # 16MB，根据分区表设置
 
 # 生成SPIFFS镜像
-spiffs_create_partition_image(spiffs ${SPIFFS_IMAGE_DIR} FLASH_IN_PROJECT)
+# spiffs_create_partition_image(spiffs ${SPIFFS_IMAGE_DIR} FLASH_IN_PROJECT)
 
 set(EXTRA_COMPONENT_DIRS components/espressif__esp_lcd_jd9365)
 set(EXTRA_COMPONENT_DIRS components/espressif__libpng)
 set(EXTRA_COMPONENT_DIRS components/lvgl__lvgl)
+set(EXTRA_COMPONENT_DIRS components/bsp_extra)
 
 # FreeType requires these definitions to build as a library
 idf_build_set_property(COMPILE_DEFINITIONS "-DFT2_BUILD_LIBRARY" APPEND)
