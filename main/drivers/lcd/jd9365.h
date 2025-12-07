@@ -18,6 +18,9 @@
 #include "unity_test_runner.h"
 #include "unity_test_utils_memory.h"
 
+#include "bsp/esp-bsp.h"
+#include "bsp/display.h"
+
 #include "drivers.h"
 
 #include <vector>
@@ -45,10 +48,12 @@ class Jd9365 : public Drivers {
         void resume() override;
         virtual ~Jd9365() {}
 
+        void run();
+
+        void initColorBar();
         void drawColorBar(uint16_t h_res, uint16_t v_res);
         void drawPattern();
         void rotate();
-        void run();
         void draw_color_bar(uint16_t h_res, uint16_t v_res);
 
         static IRAM_ATTR bool lcd_notify_refresh_ready(
@@ -66,6 +71,22 @@ class Jd9365 : public Drivers {
 
             return (need_yield == pdTRUE);
         }
+
+    public:
+        /**
+        * @brief Take LVGL mutex
+        *
+        * @param timeout_ms Timeout in [ms]. 0 will block indefinitely.
+        * @return true  Mutex was taken
+        * @return false Mutex was NOT taken
+        */
+        bool lockBspDisplay(uint32_t timeout_ms);
+
+        /**
+        * @brief Give LVGL mutex
+        *
+        */
+        void unlockBspDisplay(void);
 
     private:
         static constexpr const char* TAG =  "jd9365_driver";

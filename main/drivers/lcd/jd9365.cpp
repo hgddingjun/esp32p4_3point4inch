@@ -244,7 +244,9 @@ const std::vector<Jd9365LcdInitCmd> lcd_init_cmds = {
     {0x35, {0x00}, 1, 0},
 };
 
-void Jd9365::init() {
+
+/*测试lcd刷彩条的初始化*/
+void Jd9365::initColorBar() {
 #if TEST_PIN_NUM_BK_LIGHT >= 0
         ESP_LOGI(TAG, "Turn on LCD backlight");
 
@@ -376,6 +378,36 @@ void Jd9365::init() {
         TEST_ESP_OK(esp_lcd_dpi_panel_register_event_callbacks(*m_LcdPanel, &cbs, m_RefreshFinish.get()));
 }
 
+
+bool Jd9365::lockBspDisplay(uint32_t timeout_ms)
+{
+    return bsp_display_lock(timeout_ms);
+}
+
+void Jd9365::unlockBspDisplay(void)
+{
+    return bsp_display_unlock();
+}
+
+
+void Jd9365::init() {
+    bsp_display_cfg_t cfg = {
+        .lvgl_port_cfg = ESP_LVGL_PORT_INIT_CONFIG(),
+        .buffer_size = BSP_LCD_DRAW_BUFF_SIZE,
+        .double_buffer = BSP_LCD_DRAW_BUFF_DOUBLE,
+        .flags = {
+            .buff_dma = true,
+            .buff_spiram = false,
+            .sw_rotate = false,
+        }
+    };
+
+    bsp_display_start_with_config(&cfg);
+    bsp_display_backlight_on();
+    bsp_display_brightness_set(50);
+}
+
+
 void Jd9365::deinit() {
     // 智能指针会自动释放资源
         m_LcdPanel.reset();
@@ -482,9 +514,9 @@ void Jd9365::drawColorBar(uint16_t h_res, uint16_t v_res) {
 
 
 void Jd9365::run() {
-    drawPattern();
-    drawColorBar(LCD_H_RES, LCD_V_RES);
-    rotate();
+    //drawPattern();
+    //drawColorBar(LCD_H_RES, LCD_V_RES);
+    //rotate();
 }
 
 // 内存泄漏检测
