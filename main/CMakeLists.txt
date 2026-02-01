@@ -1,3 +1,7 @@
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 11)
+
 set(LV_DEMO_DIR ../components/lvgl__lvgl/demos)
 set(BSP_EXTRA_DIR ../components/bsp_extra)
 
@@ -12,6 +16,7 @@ idf_component_register(
 						# "drivers/spiffs/spiffs.cpp"
 						"${LV_DEMOS_SOURCES}"
 						"${BSP_EXTRA_SRC}"
+						"applications/dashboard/dashboard_view.cpp"
 
                     INCLUDE_DIRS
 						"./drivers"
@@ -21,6 +26,9 @@ idf_component_register(
 						"."
 						"${LV_DEMO_DIR}"
 						"${BSP_EXTRA_DIR}/include"
+						"../components/lvgl__lvgl"
+						"applications/dashboard"
+
 					REQUIRES fatfs esp_adc esp_timer unity sdmmc freertos driver spiffs spi_flash esp_psram espressif__esp_lcd_jd9365 chmorgan__esp-audio-player chmorgan__esp-file-iterator chmorgan__esp-libhelix-mp3
                     WHOLE_ARCHIVE)
 
