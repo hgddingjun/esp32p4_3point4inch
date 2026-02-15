@@ -5,8 +5,8 @@
 constexpr uint16_t LCD_H_RES = 800;
 constexpr uint16_t LCD_V_RES = 800;
 constexpr uint8_t LCD_BIT_PER_PIXEL = 24;
-constexpr int PIN_NUM_LCD_RST = 27;
-constexpr int PIN_NUM_BK_LIGHT = 26; // set to -1 if not used
+constexpr int PIN_NUM_LCD_RST = -1;//27;
+constexpr int PIN_NUM_BK_LIGHT = -1;//26; // set to -1 if not used
 constexpr bool LCD_BK_LIGHT_ON_LEVEL = 0; // 0 or 1
 constexpr bool LCD_BK_LIGHT_OFF_LEVEL = !LCD_BK_LIGHT_ON_LEVEL;
 constexpr uint8_t MIPI_DSI_LANE_NUM = 2;
