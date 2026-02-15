@@ -40,8 +40,6 @@ public:
 
 private:
     void createBackground();
-    void setRedBackground();
-    void lvglDemoWidgets();  // 从static改为普通成员函数
 
 private:
     static void tabview_delete_event_cb(lv_event_t* e);

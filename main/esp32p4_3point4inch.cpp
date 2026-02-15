@@ -20,10 +20,6 @@
 
 #include "dashboard_view.h"
 
-#include "dashboard_bg.h"
-
-LV_IMG_DECLARE(dashboard_bg);
-
 //extern void sdmmc_run(void);
 
 extern "C" void app_main(void)
@@ -59,18 +55,8 @@ extern "C" void app_main(void)
     // lv_demo_music();
     //lv_demo_benchmark();
     //lv_demo_widgets();
-    //lv_demo_keypad_encoder();
 
-    // 初始化LVGL后，获取屏幕并设置背景颜色
-    lv_obj_t * scr = lv_screen_active();
-    lv_obj_set_style_bg_color(scr, lv_color_black(), 0);
-
-    // 然后创建图片并显示
-    lv_obj_t * img = lv_img_create(scr);
-    lv_img_set_src(img, &dashboard_bg);
-    lv_obj_center(img);
-
-    //dashboardView.initialize();
+    dashboardView.initialize();
     jd9365_lcd.unlockBspDisplay();
     #endif
 

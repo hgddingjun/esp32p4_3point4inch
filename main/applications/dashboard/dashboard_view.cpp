@@ -1,5 +1,9 @@
 #include "dashboard_view.h"
 
+#include "assets/dashboard_bg.c"  // 引入背景图片
+// 声明外部图片
+LV_IMG_DECLARE(dashboard_bg);
+
 const char* DashboardView::TAG = "DashboardView";
 
 // 不需要再定义静态成员变量了，因为已经改为普通成员变量
@@ -93,7 +97,7 @@ DashboardView::DashboardView()
 DashboardView::~DashboardView()
 {
     if (screen_) {
-        lv_obj_del(screen_);
+        //lv_obj_del(screen_);
         screen_ = nullptr;
     }
     
@@ -106,178 +110,42 @@ DashboardView::~DashboardView()
 
 void DashboardView::createBackground() {
     ESP_LOGI(TAG, "创建背景");
+
+    lv_obj_set_style_bg_color(screen_, lv_color_black(), 0);
     
-    // 方法1: 直接设置纯色背景（确保能工作）
-    lv_obj_set_style_bg_color(screen_, lv_color_make(30, 30, 60), 0);  // 深蓝色背景
-    lv_obj_set_style_bg_opa(screen_, LV_OPA_COVER, 0);
+    // 创建背景图片对象
+    lv_obj_t* bg_img = lv_image_create(screen_);
+    if (bg_img == nullptr) {
+        ESP_LOGE(TAG, "创建背景图片对象失败");
+        return;
+    }
+
+    // 使用LV_IMG_DECLARE声明的图片数据
+    lv_image_set_src(bg_img, &dashboard_bg);
     
-    // 方法2: 创建一个背景对象
-    lv_obj_t* bg_obj = lv_obj_create(screen_);
-    lv_obj_remove_style_all(bg_obj);  // 移除默认样式
-    lv_obj_set_style_bg_color(bg_obj, lv_color_make(20, 20, 40), 0);
-    lv_obj_set_style_bg_opa(bg_obj, LV_OPA_COVER, 0);
-    lv_obj_set_size(bg_obj, LV_HOR_RES, LV_VER_RES);
-    lv_obj_align(bg_obj, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_move_background(bg_obj);  // 移到最底层
+    // 设置图片位置（居中对齐）
+    lv_obj_align(bg_img, LV_ALIGN_CENTER, 0, 0);
     
-    // 暂时不使用图片，先确保其他UI元素能正常显示
-    // 图片加载问题可以在其他UI正常工作后再调试
-    
-    ESP_LOGI(TAG, "背景创建完成(使用纯色)");
-    setRedBackground();
+    // 确保背景在最底层
+    lv_obj_move_background(bg_img);
+
+    ESP_LOGI(TAG, "背景PNG图片加载完成");
 }
 
-void DashboardView::setRedBackground() {
-    // 方法1：设置屏幕背景色为红色
-    lv_obj_set_style_bg_color(screen_, lv_color_make(255, 0, 0), 0);
-    lv_obj_set_style_bg_opa(screen_, LV_OPA_COVER, 0);
-    
-    // 或者创建一个全屏的红色矩形
-    lv_obj_t* red_bg = lv_obj_create(screen_);
-    lv_obj_set_size(red_bg, LV_HOR_RES, LV_VER_RES);
-    lv_obj_set_style_bg_color(red_bg, lv_color_make(255, 0, 0), 0);
-    lv_obj_set_style_bg_opa(red_bg, LV_OPA_COVER, 0);
-    lv_obj_align(red_bg, LV_ALIGN_CENTER, 0, 0);
-    
-    // 确保红色背景在最底层
-    lv_obj_move_background(red_bg);
-    
-    ESP_LOGI(TAG, "已设置纯红色背景");
-}
 
 bool DashboardView::initialize()
 {
-    screen_ = lv_obj_create(nullptr);
+    screen_ = lv_screen_active(); //lv_obj_create(nullptr);
     if (!screen_) {
         ESP_LOGE(TAG, "创建屏幕失败!");
         return false;
     }
 
-    //createBackground();
-    lvglDemoWidgets();
+    createBackground();
 
     return true;
 }
 
-void DashboardView::lvglDemoWidgets()
-{
-    if(LV_HOR_RES <= 320) disp_size_ = DISP_SMALL;
-    else if(LV_HOR_RES < 720) disp_size_ = DISP_MEDIUM;
-    else disp_size_ = DISP_LARGE;
-
-    font_large_ = LV_FONT_DEFAULT;
-    font_normal_ = LV_FONT_DEFAULT;
-
-    int32_t tab_h;
-    if(disp_size_ == DISP_LARGE) {
-        tab_h = 70;
-#if LV_DEMO_BENCHMARK_ALIGNED_FONTS
-        font_large_     = &lv_font_benchmark_montserrat_24_aligned;
-#elif LV_FONT_MONTSERRAT_24
-        font_large_     = &lv_font_montserrat_24;
-#else
-        LV_LOG_WARN("LV_FONT_MONTSERRAT_24 or LV_DEMO_BENCHMARK_ALIGNED_FONTS is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
-#endif
-#if LV_DEMO_BENCHMARK_ALIGNED_FONTS
-        font_normal_    = &lv_font_benchmark_montserrat_16_aligned;
-#elif LV_FONT_MONTSERRAT_16
-        font_normal_    = &lv_font_montserrat_16;
-#else
-        LV_LOG_WARN("LV_FONT_MONTSERRAT_16 or LV_DEMO_BENCHMARK_ALIGNED_FONTS is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
-#endif
-    }
-    else if(disp_size_ == DISP_MEDIUM) {
-        tab_h = 45;
-#if LV_DEMO_BENCHMARK_ALIGNED_FONTS
-        font_large_     = &lv_font_benchmark_montserrat_20_aligned;
-#elif LV_FONT_MONTSERRAT_20
-        font_large_     = &lv_font_montserrat_20;
-#else
-        LV_LOG_WARN("LV_FONT_MONTSERRAT_20 or LV_DEMO_BENCHMARK_ALIGNED_FONTS is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
-#endif
-#if LV_DEMO_BENCHMARK_ALIGNED_FONTS
-        font_normal_    = &lv_font_benchmark_montserrat_14_aligned;
-#elif LV_FONT_MONTSERRAT_14
-        font_normal_    = &lv_font_montserrat_14;
-#else
-        LV_LOG_WARN("LV_FONT_MONTSERRAT_14 or LV_DEMO_BENCHMARK_ALIGNED_FONTS is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
-#endif
-    }
-    else {   /* disp_size == DISP_SMALL */
-        tab_h = 45;
-#if LV_DEMO_BENCHMARK_ALIGNED_FONTS
-        font_large_     = &lv_font_benchmark_montserrat_18_aligned;
-#elif LV_FONT_MONTSERRAT_18
-        font_large_     = &lv_font_montserrat_18;
-#else
-        LV_LOG_WARN("LV_FONT_MONTSERRAT_18 or LV_DEMO_BENCHMARK_ALIGNED_FONTS is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
-#endif
-#if LV_DEMO_BENCHMARK_ALIGNED_FONTS
-        font_normal_    = &lv_font_benchmark_montserrat_12_aligned;
-#elif LV_FONT_MONTSERRAT_12
-        font_normal_    = &lv_font_montserrat_12;
-#else
-        LV_LOG_WARN("LV_FONT_MONTSERRAT_12 or LV_DEMO_BENCHMARK_ALIGNED_FONTS is not enabled for the widgets demo. Using LV_FONT_DEFAULT instead.");
-#endif
-    }
-
-#if LV_USE_THEME_DEFAULT
-    lv_theme_default_init(NULL, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), LV_THEME_DEFAULT_DARK,
-                          font_normal_);
-#endif
-
-    lv_style_init(&style_text_muted_);
-    lv_style_set_text_opa(&style_text_muted_, LV_OPA_50);
-
-    lv_style_init(&style_title_);
-    lv_style_set_text_font(&style_title_, font_large_);
-
-    lv_style_init(&style_icon_);
-    lv_style_set_text_color(&style_icon_, lv_theme_get_color_primary(NULL));
-    lv_style_set_text_font(&style_icon_, font_large_);
-
-    lv_style_init(&style_bullet_);
-    lv_style_set_border_width(&style_bullet_, 0);
-    lv_style_set_radius(&style_bullet_, LV_RADIUS_CIRCLE);
-
-    tv_ = lv_tabview_create(lv_screen_active());
-    lv_tabview_set_tab_bar_size(tv_, tab_h);
-    lv_obj_add_event_cb(tv_, tabview_delete_event_cb, LV_EVENT_DELETE, NULL);
-
-    lv_obj_set_style_text_font(lv_screen_active(), font_normal_, 0);
-
-    lv_obj_t* t1 = lv_tabview_add_tab(tv_, "Profile");
-    lv_obj_t* t2 = lv_tabview_add_tab(tv_, "Analytics");
-    lv_obj_t* t3 = lv_tabview_add_tab(tv_, "Shop");
-
-    if(disp_size_ == DISP_LARGE) {
-        lv_obj_t* tab_bar = lv_tabview_get_tab_bar(tv_);
-        lv_obj_set_style_pad_left(tab_bar, LV_HOR_RES / 2, 0);
-        lv_obj_t* logo = lv_image_create(tab_bar);
-        lv_obj_add_flag(logo, LV_OBJ_FLAG_IGNORE_LAYOUT);
-        LV_IMAGE_DECLARE(img_lvgl_logo);
-        lv_image_set_src(logo, &img_lvgl_logo);
-        lv_obj_align(logo, LV_ALIGN_LEFT_MID, -LV_HOR_RES / 2 + 25, 0);
-
-        lv_obj_t* label = lv_label_create(tab_bar);
-        lv_obj_add_style(label, &style_title_, 0);
-        lv_obj_add_flag(label, LV_OBJ_FLAG_IGNORE_LAYOUT);
-        lv_label_set_text_fmt(label, "LVGL v%d.%d.%d", lv_version_major(), lv_version_minor(), lv_version_patch());
-        lv_obj_align_to(label, logo, LV_ALIGN_OUT_RIGHT_TOP, 10, 0);
-
-        label = lv_label_create(tab_bar);
-        lv_label_set_text_static(label, "Widgets demo");
-        lv_obj_add_flag(label, LV_OBJ_FLAG_IGNORE_LAYOUT);
-        lv_obj_add_style(label, &style_text_muted_, 0);
-        lv_obj_align_to(label, logo, LV_ALIGN_OUT_RIGHT_BOTTOM, 10, 0);
-    }
-
-    //profile_create(t1);
-    //analytics_create(t2);
-    //shop_create(t3);
-
-    //color_changer_create(tv_);
-}
 
 void DashboardView::tabview_delete_event_cb(lv_event_t* e)
 {
