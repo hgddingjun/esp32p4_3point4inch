@@ -4,80 +4,150 @@
 // 声明外部图片
 LV_IMG_DECLARE(dashboard_bg);
 
+#include "assets/rot_000.c"
+LV_IMG_DECLARE(rot_000);
+#include "assets/rot_007.c"
+LV_IMG_DECLARE(rot_007);
+#include "assets/rot_015.c"
+LV_IMG_DECLARE(rot_015);
+#include "assets/rot_023.c"
+LV_IMG_DECLARE(rot_023);
+
+#if 1
+#include "assets/rot_030.c"
+LV_IMG_DECLARE(rot_030);
+#include "assets/rot_037.c"
+LV_IMG_DECLARE(rot_037);
+#include "assets/rot_045.c"
+LV_IMG_DECLARE(rot_045);
+#include "assets/rot_053.c"
+LV_IMG_DECLARE(rot_053);
+#include "assets/rot_060.c"
+LV_IMG_DECLARE(rot_060);
+#include "assets/rot_067.c"
+LV_IMG_DECLARE(rot_067);
+#include "assets/rot_075.c"
+LV_IMG_DECLARE(rot_075);
+#include "assets/rot_083.c"
+LV_IMG_DECLARE(rot_083);
+#include "assets/rot_090.c"
+LV_IMG_DECLARE(rot_090);
+#include "assets/rot_097.c"
+LV_IMG_DECLARE(rot_097);
+#include "assets/rot_105.c"
+LV_IMG_DECLARE(rot_105);
+#include "assets/rot_113.c"
+LV_IMG_DECLARE(rot_113);
+#include "assets/rot_120.c"
+LV_IMG_DECLARE(rot_120);
+#include "assets/rot_127.c"
+LV_IMG_DECLARE(rot_127);
+#include "assets/rot_135.c"
+LV_IMG_DECLARE(rot_135);
+#include "assets/rot_143.c"
+LV_IMG_DECLARE(rot_143);
+#include "assets/rot_150.c"
+LV_IMG_DECLARE(rot_150);
+#include "assets/rot_157.c"
+LV_IMG_DECLARE(rot_157);
+#include "assets/rot_165.c"
+LV_IMG_DECLARE(rot_165);
+#include "assets/rot_173.c"
+LV_IMG_DECLARE(rot_173);
+#include "assets/rot_180.c"
+LV_IMG_DECLARE(rot_180);
+#include "assets/rot_187.c"
+LV_IMG_DECLARE(rot_187);
+#include "assets/rot_195.c"
+LV_IMG_DECLARE(rot_195);
+#include "assets/rot_203.c"
+LV_IMG_DECLARE(rot_203);
+#include "assets/rot_210.c"
+LV_IMG_DECLARE(rot_210);
+#include "assets/rot_217.c"
+LV_IMG_DECLARE(rot_217);
+#include "assets/rot_225.c"
+LV_IMG_DECLARE(rot_225);
+#include "assets/rot_233.c"
+LV_IMG_DECLARE(rot_233);
+#include "assets/rot_240.c"
+LV_IMG_DECLARE(rot_240);
+#endif
+
 const char* DashboardView::TAG = "DashboardView";
 
 // 不需要再定义静态成员变量了，因为已经改为普通成员变量
 
 const struct NeedleData rpmNeedle[MAX_NEEDLE_NUM] = {
-    {126-SPEED_AND_RPM_GAP, 47, 250, 278}, //rot_000.png
-    {121-SPEED_AND_RPM_GAP, 40, 235, 276}, //rot_007.png
-    {114-SPEED_AND_RPM_GAP, 30, 224, 278}, //rot_015.png
-    {107-SPEED_AND_RPM_GAP, 16, 211, 283}, //rot_023.png
-    {99-SPEED_AND_RPM_GAP, 0, 197, 284}, //rot_030.png
-    {107-SPEED_AND_RPM_GAP, -17, 212, 283}, //rot_037.png
-    {114-SPEED_AND_RPM_GAP, -30, 224, 277}, //rot_045.png
-    {120-SPEED_AND_RPM_GAP, -39, 236, 276}, //rot_053.png
-    {125-SPEED_AND_RPM_GAP, -46, 251, 277}, //rot_060.png
-    {132-SPEED_AND_RPM_GAP, -54, 263, 274}, //rot_067.png
-    {139-SPEED_AND_RPM_GAP, -59, 269, 268}, //rot_075.png
-    {146-SPEED_AND_RPM_GAP, -66, 274, 262}, //rot_083.png
-    {151-SPEED_AND_RPM_GAP, -72, 277, 251}, //rot_090.png
-    {161-SPEED_AND_RPM_GAP, -78, 276, 236}, //rot_097.png
-    {170-SPEED_AND_RPM_GAP, -84, 278, 224}, //rot_105.png
-    {182-SPEED_AND_RPM_GAP, -91, 283, 210}, //rot_113.png
-    {198-SPEED_AND_RPM_GAP, -99, 284, 197}, //rot_120.png
-    {215-SPEED_AND_RPM_GAP, -90, 283, 212}, //rot_127.png
-    {228-SPEED_AND_RPM_GAP, -84, 278, 224}, //rot_135.png
-    {238-SPEED_AND_RPM_GAP, -78, 276, 236}, //rot_143.png
-    {245-SPEED_AND_RPM_GAP, -72, 277, 250}, //rot_150.png
-    {253-SPEED_AND_RPM_GAP, -66, 274, 263}, //rot_157.png
-    {258-SPEED_AND_RPM_GAP, -59, 268, 269}, //rot_165.png
-    {264-SPEED_AND_RPM_GAP, -54, 262, 274}, //rot_173.png
-    {270-SPEED_AND_RPM_GAP, -47, 250, 277}, //rot_180.png
-    {276-SPEED_AND_RPM_GAP, -39, 236, 276}, //rot_187.png
-    {283-SPEED_AND_RPM_GAP, -29, 224, 278}, //rot_195.png
-    {289-SPEED_AND_RPM_GAP, -17, 213, 282}, //rot_203.png
-    {297-SPEED_AND_RPM_GAP, 0, 197, 284}, //rot_210.png
-    {290-SPEED_AND_RPM_GAP, 16, 212, 284}, //rot_217.png
-    {283-SPEED_AND_RPM_GAP, 29, 224, 278}, //rot_225.png
-    {276-SPEED_AND_RPM_GAP, 39, 234, 276}, //rot_233.png
-    {271-SPEED_AND_RPM_GAP, 46, 251, 277}, //rot_240.png
+    {126-SPEED_AND_RPM_GAP, 47, 250, 278, &rot_000}, //rot_000.png
+    {121-SPEED_AND_RPM_GAP, 40, 235, 276, &rot_007}, //rot_007.png
+    {114-SPEED_AND_RPM_GAP, 30, 224, 278, &rot_015}, //rot_015.png
+    {107-SPEED_AND_RPM_GAP, 16, 211, 283, &rot_023}, //rot_023.png
+    {99-SPEED_AND_RPM_GAP, 0, 197, 284, &rot_030}, //rot_030.png
+    {107-SPEED_AND_RPM_GAP, -17, 212, 283, &rot_037}, //rot_037.png
+    {114-SPEED_AND_RPM_GAP, -30, 224, 277, &rot_045}, //rot_045.png
+    {120-SPEED_AND_RPM_GAP, -39, 236, 276, &rot_053}, //rot_053.png
+    {125-SPEED_AND_RPM_GAP, -46, 251, 277, &rot_060}, //rot_060.png
+    {132-SPEED_AND_RPM_GAP, -54, 263, 274, &rot_067}, //rot_067.png
+    {139-SPEED_AND_RPM_GAP, -59, 269, 268, &rot_075}, //rot_075.png
+    {146-SPEED_AND_RPM_GAP, -66, 274, 262, &rot_083}, //rot_083.png
+    {151-SPEED_AND_RPM_GAP, -72, 277, 251, &rot_090}, //rot_090.png
+    {161-SPEED_AND_RPM_GAP, -78, 276, 236, &rot_097}, //rot_097.png
+    {170-SPEED_AND_RPM_GAP, -84, 278, 224, &rot_105}, //rot_105.png
+    {182-SPEED_AND_RPM_GAP, -91, 283, 210, &rot_113}, //rot_113.png
+    {198-SPEED_AND_RPM_GAP, -99, 284, 197, &rot_120}, //rot_120.png
+    {215-SPEED_AND_RPM_GAP, -90, 283, 212, &rot_127}, //rot_127.png
+    {228-SPEED_AND_RPM_GAP, -84, 278, 224, &rot_135}, //rot_135.png
+    {238-SPEED_AND_RPM_GAP, -78, 276, 236, &rot_143}, //rot_143.png
+    {245-SPEED_AND_RPM_GAP, -72, 277, 250, &rot_150}, //rot_150.png
+    {253-SPEED_AND_RPM_GAP, -66, 274, 263, &rot_157}, //rot_157.png
+    {258-SPEED_AND_RPM_GAP, -59, 268, 269, &rot_165}, //rot_165.png
+    {264-SPEED_AND_RPM_GAP, -54, 262, 274, &rot_173}, //rot_173.png
+    {270-SPEED_AND_RPM_GAP, -47, 250, 277, &rot_180}, //rot_180.png
+    {276-SPEED_AND_RPM_GAP, -39, 236, 276, &rot_187}, //rot_187.png
+    {283-SPEED_AND_RPM_GAP, -29, 224, 278, &rot_195}, //rot_195.png
+    {289-SPEED_AND_RPM_GAP, -17, 213, 282, &rot_203}, //rot_203.png
+    {297-SPEED_AND_RPM_GAP, 0, 197, 284, &rot_210}, //rot_210.png
+    {290-SPEED_AND_RPM_GAP, 16, 212, 284, &rot_217}, //rot_217.png
+    {283-SPEED_AND_RPM_GAP, 29, 224, 278, &rot_225}, //rot_225.png
+    {276-SPEED_AND_RPM_GAP, 39, 234, 276, &rot_233}, //rot_233.png
+    {271-SPEED_AND_RPM_GAP, 46, 251, 277, &rot_240}, //rot_240.png
 };
 
 const struct NeedleData speedNeedle[MAX_NEEDLE_NUM] = {
-    {126, 47, 250, 278}, //rot_000.png
-    {121, 40, 235, 276}, //rot_007.png
-    {114, 30, 224, 278}, //rot_015.png
-    {107, 16, 211, 283}, //rot_023.png
-    {99, 0, 197, 284}, //rot_030.png
-    {107, -17, 212, 283}, //rot_037.png
-    {114, -30, 224, 277}, //rot_045.png
-    {120, -39, 236, 276}, //rot_053.png
-    {125, -46, 251, 277}, //rot_060.png
-    {132, -54, 263, 274}, //rot_067.png
-    {139, -59, 269, 268}, //rot_075.png
-    {146, -66, 274, 262}, //rot_083.png
-    {151, -72, 277, 251}, //rot_090.png
-    {161, -78, 276, 236}, //rot_097.png
-    {170, -84, 278, 224}, //rot_105.png
-    {182, -91, 283, 210}, //rot_113.png
-    {198, -99, 284, 197}, //rot_120.png
-    {215, -90, 283, 212}, //rot_127.png
-    {228, -84, 278, 224}, //rot_135.png
-    {238, -78, 276, 236}, //rot_143.png
-    {245, -72, 277, 250}, //rot_150.png
-    {253, -66, 274, 263}, //rot_157.png
-    {258, -59, 268, 269}, //rot_165.png
-    {264, -54, 262, 274}, //rot_173.png
-    {270, -47, 250, 277}, //rot_180.png
-    {276, -39, 236, 276}, //rot_187.png
-    {283, -29, 224, 278}, //rot_195.png
-    {289, -17, 213, 282}, //rot_203.png
-    {297, 0, 197, 284}, //rot_210.png
-    {290, 16, 212, 284}, //rot_217.png
-    {283, 29, 224, 278}, //rot_225.png
-    {276, 39, 234, 276}, //rot_233.png
-    {271, 46, 251, 277}, //rot_240.png
+    {126, 47, 250, 278, &rot_000}, //rot_000.png
+    {121, 40, 235, 276, &rot_007}, //rot_007.png
+    {114, 30, 224, 278, &rot_015}, //rot_015.png
+    {107, 16, 211, 283, &rot_023}, //rot_023.png
+    {99, 0, 197, 284, &rot_030}, //rot_030.png
+    {107, -17, 212, 283, &rot_037}, //rot_037.png
+    {114, -30, 224, 277, &rot_045}, //rot_045.png
+    {120, -39, 236, 276, &rot_053}, //rot_053.png
+    {125, -46, 251, 277, &rot_060}, //rot_060.png
+    {132, -54, 263, 274, &rot_067}, //rot_067.png
+    {139, -59, 269, 268, &rot_075}, //rot_075.png
+    {146, -66, 274, 262, &rot_083}, //rot_083.png
+    {151, -72, 277, 251, &rot_090}, //rot_090.png
+    {161, -78, 276, 236, &rot_097}, //rot_097.png
+    {170, -84, 278, 224, &rot_105}, //rot_105.png
+    {182, -91, 283, 210, &rot_113}, //rot_113.png
+    {198, -99, 284, 197, &rot_120}, //rot_120.png
+    {215, -90, 283, 212, &rot_127}, //rot_127.png
+    {228, -84, 278, 224, &rot_135}, //rot_135.png
+    {238, -78, 276, 236, &rot_143}, //rot_143.png
+    {245, -72, 277, 250, &rot_150}, //rot_150.png
+    {253, -66, 274, 263, &rot_157}, //rot_157.png
+    {258, -59, 268, 269, &rot_165}, //rot_165.png
+    {264, -54, 262, 274, &rot_173}, //rot_173.png
+    {270, -47, 250, 277, &rot_180}, //rot_180.png
+    {276, -39, 236, 276, &rot_187}, //rot_187.png
+    {283, -29, 224, 278, &rot_195}, //rot_195.png
+    {289, -17, 213, 282, &rot_203}, //rot_203.png
+    {297, 0, 197, 284, &rot_210}, //rot_210.png
+    {290, 16, 212, 284, &rot_217}, //rot_217.png
+    {283, 29, 224, 278, &rot_225}, //rot_225.png
+    {276, 39, 234, 276, &rot_233}, //rot_233.png
+    {271, 46, 251, 277, &rot_240}, //rot_240.png
 };
 
 DashboardView::DashboardView()
@@ -109,26 +179,38 @@ DashboardView::~DashboardView()
 }
 
 void DashboardView::createBackground() {
+    int i=0;
     ESP_LOGI(TAG, "创建背景");
 
     lv_obj_set_style_bg_color(screen_, lv_color_black(), 0);
     
     // 创建背景图片对象
-    lv_obj_t* bg_img = lv_image_create(screen_);
-    if (bg_img == nullptr) {
+    image_bg_ = lv_image_create(screen_);
+    if (image_bg_ == nullptr) {
         ESP_LOGE(TAG, "创建背景图片对象失败");
         return;
     }
 
     // 使用LV_IMG_DECLARE声明的图片数据
-    lv_image_set_src(bg_img, &dashboard_bg);
+    lv_image_set_src(image_bg_, &dashboard_bg);
     
     // 设置图片位置（居中对齐）
-    lv_obj_align(bg_img, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_align(image_bg_, LV_ALIGN_CENTER, 0, 0);
     
     // 确保背景在最底层
-    lv_obj_move_background(bg_img);
+    lv_obj_move_background(image_bg_);
 
+    for(i=0; i<MAX_NEEDLE_NUM; i++) {
+        //创建转速指针
+        rpm_needle_ = lv_image_create(screen_);
+        lv_image_set_src(rpm_needle_, rpmNeedle[i].image);
+        lv_obj_align(rpm_needle_, LV_ALIGN_CENTER, rpmNeedle[i].x, rpmNeedle[i].y);
+
+        //创建速度指针
+        speed_needle_ = lv_image_create(screen_);
+        lv_image_set_src(speed_needle_, speedNeedle[i].image);
+        lv_obj_align(speed_needle_, LV_ALIGN_CENTER, speedNeedle[i].x, speedNeedle[i].y);
+    }
     ESP_LOGI(TAG, "背景PNG图片加载完成");
 }
 

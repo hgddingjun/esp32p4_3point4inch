@@ -23,6 +23,7 @@ struct NeedleData {
     int16_t y;          // 指针在屏幕中的y坐标, 以图片的中心点为基准
     int16_t width;      // 指针宽度
     int16_t height;     // 指针高度
+    const void * image; // 指向指针图片的指针
 };
 
 class DashboardView {
@@ -46,6 +47,10 @@ private:
 
 private:
     lv_obj_t* screen_;
+    lv_obj_t* image_bg_;
+    lv_obj_t* rpm_needle_;
+    lv_obj_t* speed_needle_;
+
     static const char* TAG;
 
     // 将静态成员变量改为普通成员变量，或者保留静态但正确定义
