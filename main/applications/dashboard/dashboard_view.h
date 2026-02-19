@@ -72,6 +72,9 @@ private:
     int current_speed_index_;
     int current_rpm_index_;
 
+    lv_obj_t* label_rpm_;      //位置 (-200, 0)
+    lv_obj_t* label_speed_;    //位置 ( 200, 0)
+
 };
 
 #endif // _DASHBOARD_VIEW_H_

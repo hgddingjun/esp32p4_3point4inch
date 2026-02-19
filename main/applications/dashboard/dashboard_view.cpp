@@ -1,5 +1,8 @@
 #include "dashboard_view.h"
 
+#include "assets/ui_font_speedFont.c"
+LV_FONT_DECLARE(ui_font_speedFont);   // 声明外部字体
+
 #include "assets/dashboard_bg.c"  // 引入背景图片
 // 声明外部图片
 LV_IMG_DECLARE(dashboard_bg);
@@ -76,7 +79,9 @@ LV_IMG_DECLARE(rot_240);
 
 const char* DashboardView::TAG = "DashboardView";
 
-// 不需要再定义静态成员变量了，因为已经改为普通成员变量
+const int rpm[MAX_NEEDLE_NUM] = {
+    0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8
+};
 
 const struct NeedleData rpmNeedle[MAX_NEEDLE_NUM] = {
     {126-SPEED_AND_RPM_GAP, 47, 250, 278, &rot_000}, //rot_000.png
@@ -112,6 +117,12 @@ const struct NeedleData rpmNeedle[MAX_NEEDLE_NUM] = {
     {283-SPEED_AND_RPM_GAP, 29, 224, 278, &rot_225}, //rot_225.png
     {276-SPEED_AND_RPM_GAP, 39, 234, 276, &rot_233}, //rot_233.png
     {271-SPEED_AND_RPM_GAP, 46, 251, 277, &rot_240}, //rot_240.png
+};
+
+const int speed[MAX_NEEDLE_NUM] = {
+    0, 7, 15, 23, 30, 37, 45, 53, 60, 67, 75, 83, 90, 
+    97, 105, 113, 120, 127, 135, 143, 150, 157, 165, 
+    173, 180, 187, 195, 203, 210, 217, 225, 233, 240
 };
 
 const struct NeedleData speedNeedle[MAX_NEEDLE_NUM] = {
@@ -159,6 +170,8 @@ DashboardView::DashboardView()
     , anim_running_(false)
     , valid_(true)          // 新增
     , current_speed_index_(0)
+    , label_rpm_(nullptr)
+    , label_speed_(nullptr)
 {
     // 将指针数组全部初始化为 nullptr
     for (int i = 0; i < MAX_NEEDLE_NUM; i++) {
@@ -234,6 +247,30 @@ void DashboardView::createBackground() {
     }
 
     ESP_LOGI(TAG, "背景PNG图片加载完成");
+
+    // 创建左侧数字标签
+    label_rpm_ = lv_label_create(screen_);
+    if (label_rpm_ == nullptr) {
+        ESP_LOGE(TAG, "创建左侧标签失败");
+    } else {
+        lv_obj_set_style_text_font(label_rpm_, &ui_font_speedFont, 0);
+        lv_label_set_text(label_rpm_, "5");                // 初始显示 "0"
+        lv_obj_set_style_text_color(label_rpm_, lv_color_white(), 0);
+        lv_obj_align(label_rpm_, LV_ALIGN_CENTER, -200, 0); // 偏移 (-200, 0)
+    }
+
+    // 创建右侧数字标签
+    label_speed_ = lv_label_create(screen_);
+    if (label_speed_ == nullptr) {
+        ESP_LOGE(TAG, "创建右侧标签失败");
+    } else {
+        lv_obj_set_style_text_font(label_speed_, &ui_font_speedFont, 0);
+        lv_label_set_text(label_speed_, "210");
+        lv_obj_set_style_text_color(label_speed_, lv_color_white(), 0);
+        lv_obj_align(label_speed_, LV_ALIGN_CENTER, 200, 0);  // 偏移 (200, 0)
+    }
+
+    ESP_LOGI(TAG, "数字标签创建完成");
 }
 
 bool DashboardView::initialize()
@@ -246,7 +283,6 @@ bool DashboardView::initialize()
 
     createBackground();
     startRotationAnimation();
-
     return true;
 }
 
@@ -299,6 +335,20 @@ void DashboardView::animationCallBack(void* var, int32_t v)
     //ESP_LOGI(view->TAG, "Current rpm index set to %d", view->current_rpm_index_);
     view->current_speed_index_ = index;
     //ESP_LOGI(view->TAG, "Current speed index set to %d", view->current_speed_index_);
+
+
+    if(view->label_speed_) {
+        lv_label_set_text_fmt(view->label_speed_, "%d", speed[view->current_speed_index_]); // 更新速度标签
+    } else {
+        ESP_LOGE(view->TAG, "label_speed_ is null, cannot update speed value");
+    }
+
+    if(view->label_rpm_) {
+        lv_label_set_text_fmt(view->label_rpm_, "%d", rpm[view->current_rpm_index_]);     // 更新转速标签
+    } else {
+        ESP_LOGE(view->TAG, "label_rpm_ is null, cannot update rpm value");
+    }
+
 }
 
 void DashboardView::startRotationAnimation() {
