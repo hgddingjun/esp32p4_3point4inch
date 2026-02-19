@@ -34,6 +34,9 @@ public:
     bool initialize();
 
     void updateView(uint32_t speed);
+    void startRotationAnimation();
+    void stopRotationAnimation();
+    static void animationCallBack(void* var, int32_t v);
 
     lv_obj_t* getScreen() const {
         return screen_;
@@ -48,8 +51,8 @@ private:
 private:
     lv_obj_t* screen_;
     lv_obj_t* image_bg_;
-    lv_obj_t* rpm_needle_;
-    lv_obj_t* speed_needle_;
+    lv_obj_t* rpm_needle_[MAX_NEEDLE_NUM];
+    lv_obj_t* speed_needle_[MAX_NEEDLE_NUM];
 
     static const char* TAG;
 
@@ -62,6 +65,12 @@ private:
     lv_style_t style_title_;
     lv_style_t style_icon_;
     lv_style_t style_bullet_;
+
+    lv_anim_t anim_;
+    bool anim_running_;
+    bool valid_;          // 新增，标记对象有效
+    int current_speed_index_;
+    int current_rpm_index_;
 
 };
 

@@ -48,7 +48,6 @@ extern "C" void app_main(void)
 
     ESP_LOGI("Main", "系统初始化完成，开始测试...");
 
-    #if 1
     DashboardView dashboardView;
 
     jd9365_lcd.lockBspDisplay(0);
@@ -58,7 +57,11 @@ extern "C" void app_main(void)
 
     dashboardView.initialize();
     jd9365_lcd.unlockBspDisplay();
-    #endif
+
+    /* 测试循环(很关键！确保对象一直存活不至于导致动画中使用已被删除的对象导致空指针) */
+    while (1) {
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
 
 }
 

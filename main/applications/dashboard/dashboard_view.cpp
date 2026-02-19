@@ -152,11 +152,19 @@ const struct NeedleData speedNeedle[MAX_NEEDLE_NUM] = {
 
 DashboardView::DashboardView()
     : screen_(nullptr)
-    , disp_size_(DISP_SMALL)  // 初始化普通成员变量
+    , disp_size_(DISP_SMALL)
     , tv_(nullptr)
     , font_large_(nullptr)
     , font_normal_(nullptr)
+    , anim_running_(false)
+    , valid_(true)          // 新增
+    , current_speed_index_(0)
 {
+    // 将指针数组全部初始化为 nullptr
+    for (int i = 0; i < MAX_NEEDLE_NUM; i++) {
+        rpm_needle_[i] = nullptr;
+        speed_needle_[i] = nullptr;
+    }
     // 初始化样式
     lv_style_init(&style_text_muted_);
     lv_style_init(&style_title_);
@@ -166,16 +174,21 @@ DashboardView::DashboardView()
 
 DashboardView::~DashboardView()
 {
-    if (screen_) {
-        //lv_obj_del(screen_);
-        screen_ = nullptr;
-    }
-    
+    // 先停止动画，确保回调不会再被调用
+    lv_anim_del(this, (lv_anim_exec_xcb_t)animationCallBack);
+    anim_running_ = false;
+    valid_ = false;  // 之后再标记无效
+
     // 重置样式
     lv_style_reset(&style_text_muted_);
     lv_style_reset(&style_title_);
     lv_style_reset(&style_icon_);
     lv_style_reset(&style_bullet_);
+
+    if (screen_) {
+        //lv_obj_del(screen_);
+        screen_ = nullptr;
+    }
 }
 
 void DashboardView::createBackground() {
@@ -201,19 +214,27 @@ void DashboardView::createBackground() {
     lv_obj_move_background(image_bg_);
 
     for(i=0; i<MAX_NEEDLE_NUM; i++) {
-        //创建转速指针
-        rpm_needle_ = lv_image_create(screen_);
-        lv_image_set_src(rpm_needle_, rpmNeedle[i].image);
-        lv_obj_align(rpm_needle_, LV_ALIGN_CENTER, rpmNeedle[i].x, rpmNeedle[i].y);
+        rpm_needle_[i] = lv_image_create(screen_);
+        if (rpm_needle_[i] == nullptr) {
+            ESP_LOGE(TAG, "创建转速指针[%d]失败", i);
+        } else {
+            lv_image_set_src(rpm_needle_[i], rpmNeedle[i].image);
+            lv_obj_align(rpm_needle_[i], LV_ALIGN_CENTER, rpmNeedle[i].x, rpmNeedle[i].y);
+            if(i>0) lv_obj_add_flag(rpm_needle_[i], LV_OBJ_FLAG_HIDDEN);
+        }
 
-        //创建速度指针
-        speed_needle_ = lv_image_create(screen_);
-        lv_image_set_src(speed_needle_, speedNeedle[i].image);
-        lv_obj_align(speed_needle_, LV_ALIGN_CENTER, speedNeedle[i].x, speedNeedle[i].y);
+        speed_needle_[i] = lv_image_create(screen_);
+        if (speed_needle_[i] == nullptr) {
+            ESP_LOGE(TAG, "创建速度指针[%d]失败", i);
+        } else {
+            lv_image_set_src(speed_needle_[i], speedNeedle[i].image);
+            lv_obj_align(speed_needle_[i], LV_ALIGN_CENTER, speedNeedle[i].x, speedNeedle[i].y);
+            if(i>0) lv_obj_add_flag(speed_needle_[i], LV_OBJ_FLAG_HIDDEN);
+        }
     }
+
     ESP_LOGI(TAG, "背景PNG图片加载完成");
 }
-
 
 bool DashboardView::initialize()
 {
@@ -224,8 +245,85 @@ bool DashboardView::initialize()
     }
 
     createBackground();
+    startRotationAnimation();
 
     return true;
+}
+
+void DashboardView::animationCallBack(void* var, int32_t v)
+{
+    DashboardView* view = (DashboardView*)var;
+    if (!view || !view->valid_) return;   // 检查对象有效性
+
+    //ESP_LOGI(view->TAG, "Animation callback, var=0x%08p, value=%d", var, v);
+
+    // 检查索引范围
+    if (v < 0 || v >= MAX_NEEDLE_NUM) return;
+    uint8_t index = (uint8_t)v;
+
+    // 隐藏旧的指针（需要检查指针非空）
+    if (view->current_speed_index_ >= 0 && view->current_speed_index_ < MAX_NEEDLE_NUM) {
+        lv_obj_t* old_speed_needle = view->speed_needle_[view->current_speed_index_];
+        if (old_speed_needle != nullptr) {
+            lv_obj_add_flag(old_speed_needle, LV_OBJ_FLAG_HIDDEN);
+        } else {
+            ESP_LOGE(view->TAG, "speed_needle_[%d] is null, animation skipped", view->current_speed_index_);
+        }
+    }
+
+    if (view->current_rpm_index_ >= 0 && view->current_rpm_index_ < MAX_NEEDLE_NUM) {
+        lv_obj_t* old_rpm_needle = view->rpm_needle_[view->current_rpm_index_];
+        if (old_rpm_needle != nullptr) {
+            lv_obj_add_flag(old_rpm_needle, LV_OBJ_FLAG_HIDDEN);
+        } else {
+            ESP_LOGE(view->TAG, "rpm_needle_[%d] is null, animation skipped", view->current_rpm_index_);
+        }
+    }
+
+    // 显示新的指针
+    lv_obj_t* new_speed_needle = view->speed_needle_[index];
+    if (new_speed_needle != nullptr) {
+        lv_obj_clear_flag(new_speed_needle, LV_OBJ_FLAG_HIDDEN);
+    } else {
+        ESP_LOGE(view->TAG, "speed_needle_[%d] is null, animation skipped", index);
+    }
+
+    lv_obj_t* new_rpm_needle = view->rpm_needle_[index];
+    if (new_rpm_needle != nullptr) {
+        lv_obj_clear_flag(new_rpm_needle, LV_OBJ_FLAG_HIDDEN);
+    } else {
+        ESP_LOGE(view->TAG, "rpm_needle_[%d] is null, animation skipped", index);
+    }
+
+    view->current_rpm_index_ = index;
+    //ESP_LOGI(view->TAG, "Current rpm index set to %d", view->current_rpm_index_);
+    view->current_speed_index_ = index;
+    //ESP_LOGI(view->TAG, "Current speed index set to %d", view->current_speed_index_);
+}
+
+void DashboardView::startRotationAnimation() {
+    if (anim_running_ || !valid_) return;  // 防止重复启动或对象无效时启动
+
+    ESP_LOGI(TAG, "Starting rotation animation");
+    ESP_LOGI(TAG, "animationCallBack=0x%08p", (lv_anim_exec_xcb_t)animationCallBack);
+
+    lv_anim_init(&anim_);
+    lv_anim_set_var(&anim_, this);
+    lv_anim_set_exec_cb(&anim_, (lv_anim_exec_xcb_t)animationCallBack);
+    lv_anim_set_values(&anim_, 0, MAX_NEEDLE_NUM - 1);
+    lv_anim_set_time(&anim_, 1000);
+    lv_anim_set_playback_time(&anim_, 1000);
+    lv_anim_set_repeat_count(&anim_, LV_ANIM_REPEAT_INFINITE);
+    lv_anim_set_path_cb(&anim_, lv_anim_path_linear);
+
+    lv_anim_start(&anim_);
+    anim_running_ = true;
+}
+
+void DashboardView::stopRotationAnimation() {
+    if (!anim_running_ /*|| !valid_*/) return;
+    lv_anim_del(this, (lv_anim_exec_xcb_t)animationCallBack);
+    anim_running_ = false;
 }
 
 
