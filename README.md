@@ -9,3 +9,5 @@
    c. 执行烧录： idf.py -p /dev/ttyACM0 flash  
    d. 打印日志： idf.py -p /dev/ttyACM0 monitor
    还可以，烧录和打印命令放在一起执行：idf.py -p /dev/ttyACM0 flash monitor
+### dashboard的运行效果图
+![image text](https://github.com/hgddingjun/esp32p4_3point4inch/blob/master/MarkDown/dashboard_cover.png)
