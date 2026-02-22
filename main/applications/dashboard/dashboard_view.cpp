@@ -170,6 +170,9 @@ DashboardView::DashboardView()
     , anim_running_(false)
     , valid_(true)          // 新增
     , current_speed_index_(0)
+    , current_rpm_index_(0)
+    , smooth_speed_f_(0.0f)
+    , smooth_rpm_f_(0.0f)
     , label_rpm_(nullptr)
     , label_speed_(nullptr)
 {
@@ -376,6 +379,72 @@ void DashboardView::stopRotationAnimation() {
     anim_running_ = false;
 }
 
+
+void DashboardView::updateSpeed(int speed_value)
+{
+    // 将速度值(0-240)映射到指针索引(0-32)
+    if (speed_value < 0) speed_value = 0;
+    if (speed_value > 240) speed_value = 240;
+
+    // 指数平滑滤波，消除离散跳变引起的卡顿
+    smooth_speed_f_ += SMOOTH_FACTOR * ((float)speed_value - smooth_speed_f_);
+
+    int new_index = (int)(smooth_speed_f_ * (MAX_NEEDLE_NUM - 1) / 240.0f + 0.5f);
+    if (new_index >= MAX_NEEDLE_NUM) new_index = MAX_NEEDLE_NUM - 1;
+    if (new_index < 0) new_index = 0;
+
+    // 索引未变化时跳过更新，减少无效刷新
+    if (new_index == current_speed_index_) return;
+
+    // 先显示新指针再隐藏旧指针，避免闪烁
+    if (speed_needle_[new_index]) {
+        lv_obj_clear_flag(speed_needle_[new_index], LV_OBJ_FLAG_HIDDEN);
+    }
+    if (current_speed_index_ >= 0 && current_speed_index_ < MAX_NEEDLE_NUM) {
+        if (speed_needle_[current_speed_index_]) {
+            lv_obj_add_flag(speed_needle_[current_speed_index_], LV_OBJ_FLAG_HIDDEN);
+        }
+    }
+    current_speed_index_ = new_index;
+
+    // 更新速度数字标签
+    if (label_speed_) {
+        lv_label_set_text_fmt(label_speed_, "%d", speed_value);
+    }
+}
+
+void DashboardView::updateRpm(int rpm_value)
+{
+    // rpm_value 现为高精度值 0-8000（即RPM*1000）
+    if (rpm_value < 0) rpm_value = 0;
+    if (rpm_value > 8000) rpm_value = 8000;
+
+    // 指数平滑滤波，消除离散跳变引起的卡顿
+    smooth_rpm_f_ += SMOOTH_FACTOR * ((float)rpm_value - smooth_rpm_f_);
+
+    int new_index = (int)(smooth_rpm_f_ * (MAX_NEEDLE_NUM - 1) / 8000.0f + 0.5f);
+    if (new_index >= MAX_NEEDLE_NUM) new_index = MAX_NEEDLE_NUM - 1;
+    if (new_index < 0) new_index = 0;
+
+    // 索引未变化时跳过更新，减少无效刷新
+    if (new_index == current_rpm_index_) return;
+
+    // 先显示新指针再隐藏旧指针，避免闪烁
+    if (rpm_needle_[new_index]) {
+        lv_obj_clear_flag(rpm_needle_[new_index], LV_OBJ_FLAG_HIDDEN);
+    }
+    if (current_rpm_index_ >= 0 && current_rpm_index_ < MAX_NEEDLE_NUM) {
+        if (rpm_needle_[current_rpm_index_]) {
+            lv_obj_add_flag(rpm_needle_[current_rpm_index_], LV_OBJ_FLAG_HIDDEN);
+        }
+    }
+    current_rpm_index_ = new_index;
+
+    // 更新转速数字标签（显示实际RPM 0-8）
+    if (label_rpm_) {
+        lv_label_set_text_fmt(label_rpm_, "%d", rpm_value / 1000);
+    }
+}
 
 void DashboardView::tabview_delete_event_cb(lv_event_t* e)
 {

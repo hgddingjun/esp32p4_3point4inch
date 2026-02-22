@@ -18,7 +18,7 @@
 #include "bsp_board_extra.h"
 #include "lv_demos.h"
 
-#include "dashboard_view.h"
+#include "dashboard_controller.h"
 
 //extern void sdmmc_run(void);
 
@@ -48,15 +48,12 @@ extern "C" void app_main(void)
 
     ESP_LOGI("Main", "系统初始化完成，开始测试...");
 
-    DashboardView dashboardView;
+    DashboardController dashboardCtrl;
 
-    jd9365_lcd.lockBspDisplay(0);
-    // lv_demo_music();
-    //lv_demo_benchmark();
-    //lv_demo_widgets();
-
-    dashboardView.initialize();
-    jd9365_lcd.unlockBspDisplay();
+    //初始化MVC控制器，view在这里初始化（内部自行持锁）
+    dashboardCtrl.initialize();
+    // 启动MVC控制器（Model模拟数据生成 + Controller周期性刷新View）
+    dashboardCtrl.start();
 
     /* 测试循环(很关键！确保对象一直存活不至于导致动画中使用已被删除的对象导致空指针) */
     while (1) {

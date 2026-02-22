@@ -17,6 +17,8 @@ idf_component_register(
 						"${LV_DEMOS_SOURCES}"
 						"${BSP_EXTRA_SRC}"
 						"applications/dashboard/dashboard_view.cpp"
+						"applications/dashboard/dashboard_model.cpp"
+						"applications/dashboard/dashboard_controller.cpp"
 
                     INCLUDE_DIRS
 						"./drivers"

@@ -33,7 +33,11 @@ public:
 
     bool initialize();
 
-    void updateView(uint32_t speed);
+    /** 根据速度值(0-240)更新速度指针和标签 */
+    void updateSpeed(int speed_value);
+    /** 根据转速值(0-8000, 即RPM*1000)更新转速指针和标签 */
+    void updateRpm(int rpm_value);
+
     void startRotationAnimation();
     void stopRotationAnimation();
     static void animationCallBack(void* var, int32_t v);
@@ -71,6 +75,11 @@ private:
     bool valid_;          // 新增，标记对象有效
     int current_speed_index_;
     int current_rpm_index_;
+
+    // 指数平滑滤波参数
+    float smooth_speed_f_;    // 平滑后的浮点速度值
+    float smooth_rpm_f_;      // 平滑后的浮点转速值
+    static constexpr float SMOOTH_FACTOR = 0.35f;  // 平滑因子(0-1, 越大跟随越快)
 
     lv_obj_t* label_rpm_;      //位置 (-200, 0)
     lv_obj_t* label_speed_;    //位置 ( 200, 0)
